@@ -1,0 +1,1 @@
+# taku110730-afk-.github.io
