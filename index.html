@@ -1,0 +1,492 @@
+<div id="react-portfolio-container"></div>
+<style>
+/* ToDoアプリのスクロールバーをカスタマイズ */
+.todo-list-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+.todo-list-scroll::-webkit-scrollbar-thumb {
+    background-color: #d1d5db; /* gray-300 */
+    border-radius: 4px;
+}
+.todo-list-scroll::-webkit-scrollbar-track {
+    background-color: #f3f4f6; /* gray-100 */
+}
+/* 画像に合わせたカスタムスタイル */
+.todo-app-card {
+    background-color: #e0f2f7; /* スマホ風の背景色 */
+    border: 8px solid black; /* 外枠 */
+    border-radius: 48px; /* 角を大きく丸くする */
+    padding: 1rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+}
+.todo-app-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 12px;
+    background-color: black;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+.todo-item {
+    background-color: #ffffff;
+    border-radius: 12px;
+}
+.checkbox-custom {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+}
+.checkbox-custom:checked {
+    background-color: #4f46e5; /* indigo-600 */
+    border-color: #4f46e5;
+}
+.checkbox-custom:checked::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 6px;
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+/* LPセクションのスタイル */
+.hero-section {
+    background-color: #fce7f3; /* pink-100 */
+}
+.about-section {
+    background-color: #f9fafb; /* gray-50 */
+}
+.features-section {
+    background-color: #fff1f2; /* rose-50 */
+}
+/* 新しいECアプリのスタイル */
+.ec-app-card {
+    background-color: #fce7f3; /* pink-100 */
+}
+.color-option {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.color-option:hover {
+    transform: scale(1.1);
+}
+/* チャットアプリのスタイル */
+.chat-app-card {
+    background-color: #f3f4f6; /* gray-100 */
+    border: 1px solid #e5e7eb; /* gray-200 */
+}
+.chat-message-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+.chat-message-scroll::-webkit-scrollbar-thumb {
+    background-color: #d1d5db; /* gray-300 */
+    border-radius: 4px;
+}
+.chat-message-scroll::-webkit-scrollbar-track {
+    background-color: #f9fafb; /* gray-50 */
+}
+</style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+'use client'
+
+// メインのAppコンポーネント
+const App = () => {
+    const [currentPage, setCurrentPage] = React.useState('home');
+
+    const renderContent = () => {
+        switch (currentPage) {
+            case 'home':
+                return <Home setCurrentPage={setCurrentPage} />;
+            case 'works':
+                return <Works />;
+            default:
+                return <Home setCurrentPage={setCurrentPage} />;
+        }
+    };
+
+    return (
+        <div className="min-h-screen bg-gray-50 font-sans antialiased text-gray-800">
+            <Header setCurrentPage={setCurrentPage} />
+            <main className="container mx-auto p-4 md:p-8">
+                {renderContent()}
+            </main>
+            <Footer />
+        </div>
+    );
+};
+
+// ヘッダーコンポーネント
+const Header = ({ setCurrentPage }) => {
+    return (
+        <header className="bg-white shadow-sm sticky top-0 z-50">
+            <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+                <h1 className="text-2xl font-extrabold text-blue-600">Portfolio</h1>
+                <nav className="hidden md:flex space-x-6 text-lg font-medium">
+                    <button onClick={() => setCurrentPage('home')} className="text-gray-600 hover:text-blue-600 transition-colors duration-300">
+                        ホーム
+                    </button>
+                    <button onClick={() => setCurrentPage('works')} className="text-gray-600 hover:text-blue-600 transition-colors duration-300">
+                        作品
+                    </button>
+                </nav>
+            </div>
+        </header>
+    );
+};
+
+// ホームコンポーネント
+const Home = ({ setCurrentPage }) => {
+    const [heroImage, setHeroImage] = React.useState(null);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [error, setError] = React.useState(null);
+
+    React.useEffect(() => {
+        const fetchHeroImage = async () => {
+            // APIからの動的取得を停止し、直接URLを指定
+            setHeroImage("https://umineblog.com/wp-content/uploads/2025/08/Gemini_Generated_Image_61lf9v61lf9v61lf.png");
+            setIsLoading(false);
+        };
+        fetchHeroImage();
+    }, []); // ページ読み込み時に一度だけ実行
+
+    return (
+        <>
+            {/* ヒーローセクション */}
+            <section className="hero-section rounded-3xl shadow-xl overflow-hidden mb-12">
+                <div className="grid grid-cols-1 md:grid-cols-2">
+                    <div className="p-8 md:p-16 flex flex-col justify-center bg-white rounded-3xl md:rounded-r-none">
+                        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
+                            魅力的なデザインで、あなたのプロジェクトを実現します
+                        </h2>
+                        <p className="mt-6 text-lg text-gray-700">
+                            WebデザインからUI/UX改善まで、お客様のニーズに合わせた最適なソリューションを提供します。
+                        </p>
+                        <button
+                            onClick={() => setCurrentPage('works')}
+                            className="mt-8 px-8 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold rounded-full shadow-lg hover:from-pink-600 hover:to-rose-600 transition-all duration-300 transform hover:-translate-y-1"
+                        >
+                            作品を見る
+                        </button>
+                    </div>
+                    <div className="p-8 md:p-16 flex items-center justify-center relative min-h-[300px]">
+                        {isLoading ? (
+                            // ローディングスピナー
+                            <div className="flex justify-center items-center h-full">
+                                <div className="animate-spin rounded-full h-12 w-12 border-4 border-dashed border-rose-500"></div>
+                            </div>
+                        ) : heroImage ? (
+                            // 画像が表示される
+                            <img
+                                src={heroImage}
+                                alt="ポートフォリオのヒーロー画像"
+                                className="mt-4 w-full h-auto rounded-3xl shadow-xl"
+                                // 画像が読み込まれなかった場合のフォールバック
+                                onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = "https://placehold.co/800x500/A8DADCA8DAD/FFFFFF?text=Fallback+Image";
+                                }}
+                            />
+                        ) : (
+                            // エラーメッセージまたはプレースホルダー
+                            <div className="flex justify-center items-center h-full text-center text-gray-500">
+                                {error || "画像が見つかりませんでした。"}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </section>
+
+            {/* サービス/特徴セクション */}
+            <section className="features-section p-8 md:p-16 rounded-3xl shadow-xl mb-12">
+                <h3 className="text-3xl font-extrabold text-gray-900 mb-8 text-center">
+                    私の強み
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <FeatureCard
+                        icon="★"
+                        title="UI/UXデザイン"
+                        description="ユーザーが使いやすい、魅力的なインターフェースを設計します。"
+                    />
+                    <FeatureCard
+                        icon="&#x1f3a8;"
+                        title="画像制作"
+                        description="ロゴ、バナー、ウェブサイト用画像など、多岐にわたる制作が可能です。"
+                    />
+                    <FeatureCard
+                        icon="&#x1f680;"
+                        title="Web開発"
+                        description="最新の技術を用いて、高速で安定したウェブサイトを構築します。"
+                    />
+                </div>
+            </section>
+        </>
+    );
+};
+
+// 特徴カードコンポーネント (再利用)
+const FeatureCard = ({ icon, title, description }) => {
+    return (
+        <div className="bg-white rounded-2xl shadow-lg p-6 text-center transition-transform duration-300 hover:scale-105">
+            <div className="text-4xl mb-4">{icon}</div>
+            <h4 className="text-xl font-bold text-gray-900 mb-2">{title}</h4>
+            <p className="text-sm text-gray-600">{description}</p>
+        </div>
+    );
+};
+
+// ToDoリストアプリのコンポーネント
+const TodoApp = () => {
+    const [todos, setTodos] = React.useState([
+        { id: 1, text: 'パン', completed: false },
+        { id: 2, text: '牛乳', completed: false },
+        { id: 3, text: 'バター', completed: false },
+    ]);
+    const [newTodo, setNewTodo] = React.useState('');
+
+    const addTodo = (e) => {
+        e.preventDefault();
+        if (newTodo.trim() === '') return;
+        setTodos([...todos, { id: Date.now(), text: newTodo, completed: false }]);
+        setNewTodo('');
+    };
+
+    const toggleTodo = (id) => {
+        setTodos(todos.map(todo =>
+            todo.id === id ? { ...todo, completed: !todo.completed } : todo
+        ));
+    };
+
+    const deleteTodo = (id) => {
+        setTodos(todos.filter(todo => todo.id !== id));
+    };
+
+    return (
+        <div className="todo-app-card max-w-xs mx-auto min-h-[500px] flex flex-col relative p-4">
+            <div className="flex justify-between items-center mb-4">
+                <button className="text-gray-600 text-sm">編集</button>
+                <h3 className="text-lg font-bold text-gray-900">リスト</h3>
+                <button className="text-blue-600 font-semibold text-sm">完了</button>
+            </div>
+            <div className="flex-grow overflow-y-auto todo-list-scroll">
+                <ul>
+                    {todos.map(todo => (
+                        <li key={todo.id} className="todo-item p-3 mb-2 flex items-center transition-shadow hover:shadow-md">
+                            <input
+                                type="checkbox"
+                                checked={todo.completed}
+                                onChange={() => toggleTodo(todo.id)}
+                                className="checkbox-custom mr-3"
+                            />
+                            <span
+                                className={`flex-grow ${todo.completed ? 'line-through text-gray-500' : 'text-gray-800'}`}
+                            >
+                                {todo.text}
+                            </span>
+                        </li>
+                    ))}
+                    {/* 新しいタスクを追加するための入力欄とボタンをリスト内に配置 */}
+                    <li className="p-3 mb-2 flex items-center">
+                        <button onClick={addTodo} className="mr-3 text-blue-500 text-3xl leading-none">
+                            +
+                        </button>
+                        <input
+                            type="text"
+                            value={newTodo}
+                            onChange={(e) => setNewTodo(e.target.value)}
+                            placeholder="リスト項目を追加"
+                            className="flex-grow bg-transparent focus:outline-none placeholder-gray-400"
+                        />
+                    </li>
+                </ul>
+            </div>
+        </div>
+    );
+};
+
+// EC商品ページコンポーネント
+const ECApp = () => {
+    return (
+        <div className="bg-white rounded-3xl shadow-lg p-6 ec-app-card">
+            <div className="flex flex-col gap-6">
+                {/* 画像セクション */}
+                <div>
+                    <img
+                        src="https://placehold.co/600x400/fce7f3/rose?text=Item+Photo"
+                        alt="EC商品画像"
+                        className="w-full h-auto rounded-xl shadow-md mb-2"
+                    />
+                    {/* サムネイル画像リスト */}
+                    <div className="flex gap-1 overflow-x-auto w-full justify-center">
+                        <img src="https://placehold.co/100x100/fce7f3/rose?text=View+1" alt="サムネイル1" className="w-12 h-12 rounded-lg cursor-pointer hover:shadow-lg transition-shadow" />
+                        <img src="https://placehold.co/100x100/fce7f3/rose?text=View+2" alt="サムネイル2" className="w-12 h-12 rounded-lg cursor-pointer hover:shadow-lg transition-shadow" />
+                        <img src="https://placehold.co/100x100/fce7f3/rose?text=View+3" alt="サムネイル3" className="w-12 h-12 rounded-lg cursor-pointer hover:shadow-lg transition-shadow" />
+                        <img src="https://placehold.co/100x100/fce7f3/rose?text=View+4" alt="サムネイル4" className="w-12 h-12 rounded-lg cursor-pointer hover:shadow-lg transition-shadow" />
+                    </div>
+                </div>
+                {/* 情報セクション */}
+                <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-1">
+                        商品名
+                    </h3>
+                    <p className="text-sm text-gray-500 mb-1">説明文</p>
+                    <div className="flex items-center mb-2">
+                        <span className="text-yellow-400">★★★★☆</span>
+                        <span className="text-gray-500 ml-1 text-sm">(22)</span>
+                    </div>
+                    <p className="text-2xl font-extrabold text-indigo-600 mb-4">
+                        ?9,570 <span className="text-base font-normal text-gray-500">(税込)</span>
+                    </p>
+                    <div className="mb-4">
+                        <p className="text-sm font-semibold text-gray-600 mb-1">COLOR チャコールグレー</p>
+                        <div className="flex gap-2">
+                            <div className="color-option bg-gray-700 ring-2 ring-indigo-500 ring-offset-2"></div>
+                            <div className="color-option bg-gray-300"></div>
+                            <div className="color-option bg-white border border-gray-300"></div>
+                            <div className="color-option bg-gray-500"></div>
+                        </div>
+                    </div>
+
+                    <button className="w-full px-6 py-3 bg-gray-200 text-gray-800 font-bold rounded-xl shadow-sm hover:bg-gray-300 transition-colors duration-300 mb-2">
+                        カートに追加する
+                    </button>
+                    <button className="w-full px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition-colors duration-300">
+                        shop Pay
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// 画像ギャラリーコンポーネント
+const ImageGallery = () => {
+    const images = [
+        // WordPressのメディアライブラリから取得した画像のURLをここに貼り付けてください
+        // 例: "https://example.com/wp-content/uploads/2024/01/my-logo.png",
+        "https://placehold.co/600x400/7c3aed/white?text=Logo",
+        "https://placehold.co/600x400/10b981/white?text=Graphic",
+        "https://placehold.co/600x400/f87171/white?text=UI+Kit",
+        "https://placehold.co/600x400/c026d3/white?text=Illustration",
+        "https://placehold.co/600x400/2563eb/white?text=Banner",
+        "https://placehold.co/600x400/f97316/white?text=Design",
+    ];
+
+    return (
+        <div className="p-4 grid grid-cols-2 gap-4 overflow-y-auto">
+            {images.map((src, index) => (
+                <img
+                    key={index}
+                    src={src}
+                    alt={`作品 ${index + 1}`}
+                    className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform"
+                />
+            ))}
+        </div>
+    );
+};
+
+// 作品コンポーネント
+const Works = () => {
+    return (
+        <section className="p-8 bg-white rounded-3xl shadow-xl">
+            <h2 className="text-3xl font-extrabold text-gray-900 mb-8 border-b-2 pb-2">
+                作品 (LP / UI / 画像)
+            </h2>
+            <div className="mb-12">
+                <h3 className="text-2xl font-bold text-gray-800 mb-4">ランディングページ (サンプル)</h3>
+                <p className="text-gray-600 mb-6">
+                    ヒーロー、特徴、CTA、フッターまで一式。WordPressのカスタムHTMLブロックに貼るだけで動きます。
+                </p>
+                <div className="bg-gray-100 p-6 rounded-2xl border border-gray-200">
+                    <p className="text-center text-gray-500">
+                        このセクションにLPデザインのプレビューやリンクを配置します。
+                    </p>
+                </div>
+            </div>
+            <div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-6">アプリUIギャラリー</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {/* ToDoアプリのデモ作品をここに表示 */}
+                    <div className="bg-white rounded-3xl shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105">
+                        <div className="bg-indigo-500 p-8 relative flex items-center justify-center">
+                            <div className="relative z-10 text-white text-center">
+                                <h4 className="text-4xl font-black">ToDo</h4>
+                                <p className="mt-1 text-sm font-semibold">To Do App</p>
+                            </div>
+                        </div>
+                        <div className="p-6">
+                            <h5 className="text-xl font-bold text-gray-900 mb-4">ToDoアプリ (デモ)</h5>
+                            <p className="text-sm text-gray-600 mb-4">タスクを追加・完了・削除できるシンプルなアプリです。</p>
+                            <TodoApp />
+                        </div>
+                    </div>
+                    {/* EC商品ページコンポーネントをここに表示 */}
+                    <div className="bg-white rounded-3xl shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105">
+                        <div className="bg-rose-500 p-8 relative flex items-center justify-center">
+                            <div className="relative z-10 text-white text-center">
+                                <h4 className="text-4xl font-black">EC</h4>
+                                <p className="mt-1 text-sm font-semibold">EC Item Card</p>
+                            </div>
+                        </div>
+                        <div className="p-6">
+                            <h5 className="text-xl font-bold text-gray-900 mb-4">EC商品ページ (デモ)</h5>
+                            <p className="text-sm text-gray-600 mb-4">商品カードとCTAを強調したデザイン。</p>
+                            <ECApp />
+                        </div>
+                    </div>
+                    {/* 画像制作のカードをここに表示 */}
+                    <div className="bg-white rounded-3xl shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105">
+                        <div className="bg-pink-500 p-8 relative flex items-center justify-center">
+                            <div className="relative z-10 text-white text-center">
+                                <h4 className="text-4xl font-black">画像制作</h4>
+                                <p className="mt-1 text-sm font-semibold">Image Production</p>
+                            </div>
+                        </div>
+                        <div className="p-6">
+                            <h5 className="text-xl font-bold text-gray-900 mb-4">画像制作 (デモ)</h5>
+                            <p className="text-sm text-gray-600 mb-4">ロゴやバナーなどの作品を展示します。</p>
+                            <ImageGallery />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+// フッターコンポーネント
+const Footer = () => {
+    return (
+        <footer className="bg-gray-900 text-white py-8 mt-12">
+            <div className="container mx-auto px-4 text-center">
+                <p>&copy; 2024 Portfolio. All Rights Reserved.</p>
+            </div>
+        </footer>
+    );
+};
+
+// ReactアプリケーションをDOMにレンダリング
+const container = document.getElementById('react-portfolio-container');
+const root = ReactDOM.createRoot(container);
+root.render(<App />);
+
+</script>
