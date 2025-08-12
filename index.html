@@ -155,19 +155,6 @@ const Header = ({ setCurrentPage }) => {
 
 // ホームコンポーネント
 const Home = ({ setCurrentPage }) => {
-    const [heroImage, setHeroImage] = React.useState(null);
-    const [isLoading, setIsLoading] = React.useState(true);
-    const [error, setError] = React.useState(null);
-
-    React.useEffect(() => {
-        const fetchHeroImage = async () => {
-            // APIからの動的取得を停止し、直接URLを指定
-            setHeroImage("https://umineblog.com/wp-content/uploads/2025/08/Gemini_Generated_Image_61lf9v61lf9v61lf.png");
-            setIsLoading(false);
-        };
-        fetchHeroImage();
-    }, []); // ページ読み込み時に一度だけ実行
-
     return (
         <>
             {/* ヒーローセクション */}
@@ -187,30 +174,11 @@ const Home = ({ setCurrentPage }) => {
                             作品を見る
                         </button>
                     </div>
-                    <div className="p-8 md:p-16 flex items-center justify-center relative min-h-[300px]">
-                        {isLoading ? (
-                            // ローディングスピナー
-                            <div className="flex justify-center items-center h-full">
-                                <div className="animate-spin rounded-full h-12 w-12 border-4 border-dashed border-rose-500"></div>
-                            </div>
-                        ) : heroImage ? (
-                            // 画像が表示される
-                            <img
-                                src={heroImage}
-                                alt="ポートフォリオのヒーロー画像"
-                                className="mt-4 w-full h-auto rounded-3xl shadow-xl"
-                                // 画像が読み込まれなかった場合のフォールバック
-                                onError={(e) => {
-                                    e.target.onerror = null;
-                                    e.target.src = "https://placehold.co/800x500/A8DADCA8DAD/FFFFFF?text=Fallback+Image";
-                                }}
-                            />
-                        ) : (
-                            // エラーメッセージまたはプレースホルダー
-                            <div className="flex justify-center items-center h-full text-center text-gray-500">
-                                {error || "画像が見つかりませんでした。"}
-                            </div>
-                        )}
+                    {/* 画像を削除し、代わりにプレースホルダーテキストを配置 */}
+                    <div className="p-8 md:p-16 flex items-center justify-center relative min-h-[300px] bg-gray-200 rounded-3xl md:rounded-l-none">
+                        <p className="text-center text-gray-500 text-lg font-semibold">
+                            プレースホルダー
+                        </p>
                     </div>
                 </div>
             </section>
