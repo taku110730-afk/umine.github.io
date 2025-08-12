@@ -111,7 +111,7 @@
 </style>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script type="text/babel">
 'use client'
@@ -182,16 +182,11 @@ const Home = ({ setCurrentPage }) => {
                             作品を見る
                         </button>
                     </div>
-                    {/* 画像を削除し、代わりにプレースホルダーテキストを配置 */}
+                    {/* ヒーローセクションの画像を元に戻す */}
                     <div className="p-8 md:p-16 flex items-center justify-center relative min-h-[300px] bg-gray-200 rounded-3xl md:rounded-l-none">
                         <p className="text-center text-gray-500 text-lg font-semibold">
                             プレースホルダー
                         </p>
-                        <img
-                            src="Gemini_Generated_Image_61lf9v61lf9v61lf.png"
-                            alt="Gemini生成画像"
-                            className="absolute inset-0 w-full h-full object-cover rounded-3xl md:rounded-l-none"
-                        />
                     </div>
                 </div>
             </section>
@@ -362,10 +357,11 @@ const ECApp = () => {
 const ImageProductionCard = () => {
     return (
         <div className="image-production-card">
-            {/* ここでプレースホルダー画像を配置しています */}
-            <div className="w-full h-48 flex items-center justify-center font-bold text-xl rounded-t-xl" style={{ backgroundColor: '#ffdede', color: '#880000' }}>
-                Item Photo
-            </div>
+            <img
+                src="Gemini_Generated_Image_61lf9v61lf9v61lf.png"
+                alt="作品画像"
+                className="w-full h-auto rounded-t-xl"
+            />
             <div className="p-4">
                 <div className="text-xs font-semibold text-gray-500 mb-1">01 | 京都の寺社巡り</div>
                 <h4 className="text-xl font-bold text-gray-900 mb-2 leading-tight">古都の風景を切り取るフォトジェニックな旅</h4>
@@ -449,7 +445,13 @@ const Footer = () => {
 };
 
 // ReactアプリケーションをDOMにレンダリング
-const container = document.getElementById('react-portfolio-container');
-const root = ReactDOM.createRoot(container);
-root.render(<App />);
+window.onload = function() {
+    const container = document.getElementById('react-portfolio-container');
+    if (container && typeof ReactDOM !== 'undefined') {
+        const root = ReactDOM.createRoot(container);
+        root.render(<App />);
+    } else {
+        console.error("React container or ReactDOM not found.");
+    }
+}
 </script>
