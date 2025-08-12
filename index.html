@@ -100,6 +100,14 @@
 .chat-message-scroll::-webkit-scrollbar-track {
     background-color: #f9fafb; /* gray-50 */
 }
+
+/* 添付画像のスタイルを模倣 */
+.image-production-card {
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
 </style>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
@@ -298,16 +306,16 @@ const ECApp = () => {
                 {/* 画像セクション */}
                 <div>
                     <img
-                        src="https://placehold.co/600x400/fce7f3/rose?text=Item+Photo"
+                        src="https://placehold.co/600x400/e0f7e0/4f46e5?text=Item+Photo"
                         alt="EC商品画像"
                         className="w-full h-auto rounded-xl shadow-md mb-2"
                     />
                     {/* サムネイル画像リスト */}
                     <div className="flex gap-1 overflow-x-auto w-full justify-center">
-                        <img src="https://placehold.co/100x100/fce7f3/rose?text=View+1" alt="サムネイル1" className="w-12 h-12 rounded-lg cursor-pointer hover:shadow-lg transition-shadow" />
-                        <img src="https://placehold.co/100x100/fce7f3/rose?text=View+2" alt="サムネイル2" className="w-12 h-12 rounded-lg cursor-pointer hover:shadow-lg transition-shadow" />
-                        <img src="https://placehold.co/100x100/fce7f3/rose?text=View+3" alt="サムネイル3" className="w-12 h-12 rounded-lg cursor-pointer hover:shadow-lg transition-shadow" />
-                        <img src="https://placehold.co/100x100/fce7f3/rose?text=View+4" alt="サムネイル4" className="w-12 h-12 rounded-lg cursor-pointer hover:shadow-lg transition-shadow" />
+                        <img src="https://placehold.co/100x100/c7d2fe/4338ca?text=View+1" alt="サムネイル1" className="w-12 h-12 rounded-lg cursor-pointer hover:shadow-lg transition-shadow" />
+                        <img src="https://placehold.co/100x100/d1fae5/065f46?text=View+2" alt="サムネイル2" className="w-12 h-12 rounded-lg cursor-pointer hover:shadow-lg transition-shadow" />
+                        <img src="https://placehold.co/100x100/fee2e2/991b1b?text=View+3" alt="サムネイル3" className="w-12 h-12 rounded-lg cursor-pointer hover:shadow-lg transition-shadow" />
+                        <img src="https://placehold.co/100x100/fef3c7/92400e?text=View+4" alt="サムネイル4" className="w-12 h-12 rounded-lg cursor-pointer hover:shadow-lg transition-shadow" />
                     </div>
                 </div>
                 {/* 情報セクション */}
@@ -321,7 +329,7 @@ const ECApp = () => {
                         <span className="text-gray-500 ml-1 text-sm">(22)</span>
                     </div>
                     <p className="text-2xl font-extrabold text-indigo-600 mb-4">
-                        ?9,570 <span className="text-base font-normal text-gray-500">(税込)</span>
+                        ¥9,570 <span className="text-base font-normal text-gray-500">(税込)</span>
                     </p>
                     <div className="mb-4">
                         <p className="text-sm font-semibold text-gray-600 mb-1">COLOR チャコールグレー</p>
@@ -345,29 +353,24 @@ const ECApp = () => {
     );
 };
 
-// 画像ギャラリーコンポーネント
-const ImageGallery = () => {
-    const images = [
-        // WordPressのメディアライブラリから取得した画像のURLをここに貼り付けてください
-        // 例: "https://example.com/wp-content/uploads/2024/01/my-logo.png",
-        "https://placehold.co/600x400/7c3aed/white?text=Logo",
-        "https://placehold.co/600x400/10b981/white?text=Graphic",
-        "https://placehold.co/600x400/f87171/white?text=UI+Kit",
-        "https://placehold.co/600x400/c026d3/white?text=Illustration",
-        "https://placehold.co/600x400/2563eb/white?text=Banner",
-        "https://placehold.co/600x400/f97316/white?text=Design",
-    ];
-
+// 添付画像を模倣した作品カードコンポーネント
+const ImageProductionCard = () => {
     return (
-        <div className="p-4 grid grid-cols-2 gap-4 overflow-y-auto">
-            {images.map((src, index) => (
-                <img
-                    key={index}
-                    src={src}
-                    alt={`作品 ${index + 1}`}
-                    className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform"
-                />
-            ))}
+        <div className="image-production-card">
+            <img
+                src="https://placehold.co/600x400/94a3b8/fff?text=image"
+                alt="京都の寺社巡り"
+                className="w-full h-auto object-cover"
+            />
+            <div className="p-4">
+                <div className="text-xs font-semibold text-gray-500 mb-1">01 | 京都の寺社巡り</div>
+                <h4 className="text-xl font-bold text-gray-900 mb-2 leading-tight">古都の風景を切り取るフォトジェニックな旅</h4>
+                <p className="text-sm text-gray-600">
+                    歴史ある寺院や美しい庭園を巡り、四季折々の表情を写真に収めます。
+                    <br/>
+                    ガイドマップやSNS投稿のイメージ制作にも対応可能です。
+                </p>
+            </div>
         </div>
     );
 };
@@ -377,19 +380,8 @@ const Works = () => {
     return (
         <section className="p-8 bg-white rounded-3xl shadow-xl">
             <h2 className="text-3xl font-extrabold text-gray-900 mb-8 border-b-2 pb-2">
-                作品 (LP / UI / 画像)
+                作品 (UI / 画像)
             </h2>
-            <div className="mb-12">
-                <h3 className="text-2xl font-bold text-gray-800 mb-4">ランディングページ (サンプル)</h3>
-                <p className="text-gray-600 mb-6">
-                    ヒーロー、特徴、CTA、フッターまで一式。WordPressのカスタムHTMLブロックに貼るだけで動きます。
-                </p>
-                <div className="bg-gray-100 p-6 rounded-2xl border border-gray-200">
-                    <p className="text-center text-gray-500">
-                        このセクションにLPデザインのプレビューやリンクを配置します。
-                    </p>
-                </div>
-            </div>
             <div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-6">アプリUIギャラリー</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -421,7 +413,7 @@ const Works = () => {
                             <ECApp />
                         </div>
                     </div>
-                    {/* 画像制作のカードをここに表示 */}
+                    {/* 添付画像を模倣した作品カードをここに表示 */}
                     <div className="bg-white rounded-3xl shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105">
                         <div className="bg-pink-500 p-8 relative flex items-center justify-center">
                             <div className="relative z-10 text-white text-center">
@@ -432,7 +424,7 @@ const Works = () => {
                         <div className="p-6">
                             <h5 className="text-xl font-bold text-gray-900 mb-4">画像制作 (デモ)</h5>
                             <p className="text-sm text-gray-600 mb-4">ロゴやバナーなどの作品を展示します。</p>
-                            <ImageGallery />
+                            <ImageProductionCard />
                         </div>
                     </div>
                 </div>
@@ -456,5 +448,4 @@ const Footer = () => {
 const container = document.getElementById('react-portfolio-container');
 const root = ReactDOM.createRoot(container);
 root.render(<App />);
-
 </script>
